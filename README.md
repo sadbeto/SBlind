@@ -38,7 +38,9 @@ reporting and `PRIVACY.md` for the prototype data-handling boundary.
 
 This is the selected mobile-first frontend for the Specialist project. It remains a development prototype, accessible through its web export; native store distribution is not required for the initial customer flow.
 
-Target: customer submits on the website -> authenticated AWS API and durable storage -> queued processing -> approved business notification -> manual forwarding to sales staff. GitHub stores source; hosting is planned but not connected or deployed. No production integration is implemented yet.
+Target: customer submits on the website -> HTTPS request to an EC2-hosted API -> server-side validation and processing -> durable storage in a private S3 bucket -> approved business notification -> manual forwarding to sales staff. GitHub stores source; hosting and AWS infrastructure are planned but not connected or deployed. No production integration is implemented yet.
+
+The EC2 service will use an IAM role with least-privilege S3 access; the client will not contain AWS credentials or receive general bucket access. See `docs/aws-backend.md` for the planned security boundary.
 
 Keep original customer data authoritative. Automated processing may summarize notes but must not invent measurements, prices or confirmed bookings. Customer intake and a future authenticated staff dashboard must be separate.
 
