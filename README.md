@@ -1,6 +1,8 @@
-# Specialist Blinds mobile demo
+# SBlind — responsive customer intake demo
 
-Expo / React Native / TypeScript prototype based on the local `specialist-blinds-estimator` web demo. This is a separate project; the web version is untouched.
+Expo / React Native / TypeScript prototype based on the local `specialist-blinds-estimator` web demo. One customer-facing web export supports phones and desktop browsers. The legacy estimator project is untouched.
+
+Repository: https://github.com/sadbeto/SBlind (renamed by the owner; verified public). The local folder retains its original name. No push or deployment is included in this responsive UI change.
 
 ## Run locally
 
@@ -14,11 +16,13 @@ Open the QR code with Expo Go on a compatible phone, or press `w` for a browser 
 
 ## Current flow
 
-Four short screens with persistent bottom navigation: project and area, goal and product, optional measurements and service, then a tentative visit/contact. Each selection remains a conventional click-to-open dropdown, with the suggested products ordered first. Back preserves all answers; Next validates only the current required section; optional measurements can be skipped. The final screen reviews the brief before saving to the in-memory demo inbox.
+Four short screens with persistent bottom navigation: project and area, goal and product, optional measurements and service, then a tentative visit/contact. Each selection remains a conventional click-to-open dropdown, with the suggested products ordered first. Back preserves all answers; Next validates only the current required section; optional measurements can be skipped. The final screen reviews the brief before an explicitly simulated submission. No inbox, staff panel, fake receipt, or claim of server persistence is exposed. The completion screen supports review and starting over.
+
+At widths of 960px and above, the form has a bounded two-column layout with a progress/sidebar summary. Smaller screens keep the single-column wizard. Both use the same state and validation.
 
 The real horizontal Specialist wordmark and Beto's circular `specialistlogo.png` badge are bundled locally. The badge is also used for app icons and web favicon.
 
-The example prices and time windows are **not approved live business data**. No API, reservation, persistence, authentication, WhatsApp, or lead delivery exists. Do not enter real personal information; the inbox exists only in the current app session. Product selection, validation, and calculation live in `src/domain.ts`; UI lives in `App.tsx`.
+The example prices and time windows are **not approved live business data**. No API, reservation, customer-data persistence, authentication, WhatsApp, or lead delivery exists. Do not enter real personal information; form state exists only in the current app session. Product selection, validation, and calculation live in `src/domain.ts`; UI lives in `App.tsx`.
 
 ## Verify
 
@@ -31,10 +35,30 @@ npx expo export --platform android --output-dir dist-android
 
 ## Approved direction
 
-This is the selected mobile-first frontend for the Specialist project. It remains a private development prototype, accessible through its web export; native store distribution is not required for the initial customer flow.
+This is the selected mobile-first frontend for the Specialist project. It remains a development prototype, accessible through its web export; native store distribution is not required for the initial customer flow.
 
 Target: customer submits on the website -> AWS API and durable storage -> queued processing by dedicated Hermes on EC2 -> WhatsApp notification to Specialist -> manual forwarding to sales staff. GitHub stores source; Vercel hosting is planned but not connected or deployed. No production integration is implemented yet.
 
 Keep original customer data authoritative. Hermes may summarize notes but must not invent measurements, prices or confirmed bookings. Customer intake and a future authenticated staff dashboard must be separate.
 
-Next checkpoint: define the submission contract and durable backend, then replace the in-memory save with a real submission acknowledgement. Approve business pricing and availability before displaying them as live data. AWS provisioning, Vercel deployment and actual WhatsApp sends remain separate approval steps.
+Next checkpoint: define the submission contract and durable backend, then replace the clearly labelled simulation with a real submission acknowledgement after durable storage. Approve business pricing and availability before displaying them as live data. AWS provisioning, Vercel deployment and actual WhatsApp sends remain separate approval steps.
+
+## Responsive verification
+
+- `npm test`: domain and localization tests, including validation mapped to the actual four screens.
+- `npm run typecheck` and `npx expo export --platform web --output-dir dist-responsive`.
+- Serve `dist-responsive` on loopback port 5180.
+- `scripts/qa-responsive.cjs` runs real browser clicks at 1440, 960, 768, 390 and 320px: required fields, back/state retention, optional measurements, invalid phone, simulated completion, review and reset. It asserts no horizontal overflow and no uncaught page errors.
+- Run with an available Playwright module (`PLAYWRIGHT_MODULE`) and optional browser executable (`CHROME_PATH`). Results/screenshots are generated under ignored `qa/`.
+- Native-device and soft-keyboard testing remain outside this browser verification.
+- Existing standalone Snack exports are legacy handoff artifacts, not regenerated by this web change. `App.tsx` is the source of truth.
+
+## Language and appearance
+
+- Header controls switch Spanish/English and light/dark without resetting the form.
+- Spanish is the initial language. Theme follows the system until explicitly selected.
+- Browser storage key `sblind.ui.v1` stores only language and theme. No customer fields are persisted. Blocked or malformed storage falls back safely.
+- All labels, options, hints, validation errors, measurement summaries and completion copy support both languages. Business values/product identifiers stay canonical; typed customer text is never translated.
+- Original brand artwork stays on a white plate in dark mode; the blue/yellow identity remains unchanged.
+- `scripts/qa-preferences.cjs` checks the full measured flow in both languages/themes at 1440px and 320px, switching preferences mid-form, reload persistence, blocked/corrupt storage, system dark default, and absence of horizontal overflow/uncaught page errors.
+- Preference persistence is browser-only. Native device appearance uses the system and in-session controls; native storage is not added.

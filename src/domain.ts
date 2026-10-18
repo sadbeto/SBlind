@@ -63,7 +63,7 @@ export function calculate(project: Project, measures: Measure[], prefs: Preferen
 }
 
 export function validateProject(project: Project): string | null {
-  for (const step of [1, 2, 3, 5]) {
+  for (const step of [1, 2, 3, 4]) {
     const issue = validateStep(step, project);
     if (issue) return issue;
   }
@@ -72,10 +72,10 @@ export function validateProject(project: Project): string | null {
 
 export function validateStep(step: number, project: Project): string | null {
   if (step === 1 && !project.type) return 'Selecciona el tipo de proyecto.';
-  if (step === 2 && (!project.area || !project.town.trim())) return 'Selecciona un área e indica el municipio.';
-  if (step === 3 && (!project.goal || !project.productId)) return 'Elige una prioridad y un producto.';
-  if (step === 5) {
-    if (!project.slot || !project.name.trim() || !/^\+?[0-9()\-\s]{10,}$/.test(project.phone.trim()))
+  if (step === 1 && (!project.area || !project.town.trim())) return 'Selecciona un área e indica el municipio.';
+  if (step === 2 && (!project.goal || !project.productId)) return 'Elige una prioridad y un producto.';
+  if (step === 4) {
+    if (!project.slot || !project.name.trim() || (!/^\+?[0-9()\-\s]+$/.test(project.phone.trim()) || !/^\d{10,15}$/.test(project.phone.replace(/\D/g, ''))))
       return 'Completa horario, nombre y un teléfono válido.';
   }
   return null;

@@ -46,3 +46,6 @@ dist-*/
 # generated native folders
 /ios
 /android
+
+# local browser verification artifacts
+qa/
