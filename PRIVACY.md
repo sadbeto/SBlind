@@ -8,6 +8,7 @@ SBlind is a development prototype and is not approved for collecting real custom
 - The repository contains no backend, database, analytics integration, authentication system, or lead-delivery integration.
 - Form entries are not transmitted by this prototype.
 - Reloading or closing the application clears the in-memory entries.
+- The browser stores only language and appearance preferences under `sblind.ui.v1`; no form entries or customer identifiers are stored there. Clearing site storage removes these preferences.
 
 Use fictitious names, phone numbers, measurements, and appointment details during testing.
 

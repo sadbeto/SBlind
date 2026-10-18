@@ -26,7 +26,7 @@ test('measured estimate matches the web formula', () => {
 test('incomplete measurements are ignored; optional detail can be skipped', () => {
   const project = emptyProject();
   assert.equal(calculate(project, [{ id: 1, area: 'Sala', width: '72', height: '', qty: '1' }], defaultPreferences()).windows, 0);
-  assert.equal(validateStep(4, project), null);
+  assert.equal(validateStep(3, project), null);
 });
 
 test('four-screen flow validates required sections and skips optional detail', () => {
@@ -39,6 +39,16 @@ test('four-screen flow validates required sections and skips optional detail', (
 test('step validation blocks missing details and invalid phone', () => {
   assert.ok(validateStep(1, emptyProject()));
   const project = { ...emptyProject(), slot: choices.slots[0], name: 'Demo', phone: '123' };
-  assert.ok(validateStep(5, project));
-  assert.equal(validateStep(5, { ...project, phone: '787-000-0000' }), null);
+  assert.ok(validateStep(4, project));
+  assert.equal(validateStep(4, { ...project, phone: '787-000-0000' }), null);
+});
+
+test('each visible screen validates its own fields', () => {
+  const project = { ...emptyProject(), type: 'Residencial' };
+  assert.ok(validateStep(1, project));
+  Object.assign(project, { area: 'Sala y comedor', town: 'Ponce' });
+  assert.equal(validateStep(1, project), null);
+  assert.ok(validateStep(2, project));
+  assert.equal(validateStep(3, project), null);
+  assert.ok(validateStep(4, { ...project, slot: choices.slots[0], name: 'Demo', phone: '----------' }));
 });
