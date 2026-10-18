@@ -2,13 +2,14 @@
 
 Expo / React Native / TypeScript prototype based on the local `specialist-blinds-estimator` web demo. One customer-facing web export supports phones and desktop browsers. The legacy estimator project is untouched.
 
-Repository: https://github.com/sadbeto/SBlind (renamed by the owner; verified public). The local folder retains its original name. No push or deployment is included in this responsive UI change.
+Repository: https://github.com/sadbeto/SBlind. This is a development prototype, not a deployed intake service.
 
 ## Run locally
 
 ```bash
-cd /home/sadbeto/Documents/Hermes-Zuck/projects/specialist-blinds-mobile
-npm install --no-audit
+git clone https://github.com/sadbeto/SBlind.git
+cd SBlind
+npm ci
 npm start
 ```
 
@@ -33,13 +34,17 @@ npx expo export --platform web --output-dir dist
 npx expo export --platform android --output-dir dist-android
 ```
 
+GitHub Actions runs the tests, TypeScript checks, Expo validation, a web export,
+dependency review, and CodeQL analysis. See `SECURITY.md` for vulnerability
+reporting and `PRIVACY.md` for the prototype data-handling boundary.
+
 ## Approved direction
 
 This is the selected mobile-first frontend for the Specialist project. It remains a development prototype, accessible through its web export; native store distribution is not required for the initial customer flow.
 
-Target: customer submits on the website -> AWS API and durable storage -> queued processing by dedicated Hermes on EC2 -> WhatsApp notification to Specialist -> manual forwarding to sales staff. GitHub stores source; Vercel hosting is planned but not connected or deployed. No production integration is implemented yet.
+Target: customer submits on the website -> authenticated AWS API and durable storage -> queued processing -> approved business notification -> manual forwarding to sales staff. GitHub stores source; hosting is planned but not connected or deployed. No production integration is implemented yet.
 
-Keep original customer data authoritative. Hermes may summarize notes but must not invent measurements, prices or confirmed bookings. Customer intake and a future authenticated staff dashboard must be separate.
+Keep original customer data authoritative. Automated processing may summarize notes but must not invent measurements, prices or confirmed bookings. Customer intake and a future authenticated staff dashboard must be separate.
 
 Next checkpoint: define the submission contract and durable backend, then replace the clearly labelled simulation with a real submission acknowledgement after durable storage. Approve business pricing and availability before displaying them as live data. AWS provisioning, Vercel deployment and actual WhatsApp sends remain separate approval steps.
 

@@ -43,7 +43,7 @@ test('step validation blocks missing details and invalid phone', () => {
   assert.equal(validateStep(4, { ...project, phone: '787-000-0000' }), null);
 });
 
- test('each visible screen validates its own fields', () => {
+test('each visible screen validates its own fields', () => {
   const project = { ...emptyProject(), type: 'Residencial' };
   assert.ok(validateStep(1, project));
   Object.assign(project, { area: 'Sala y comedor', town: 'Ponce' });
