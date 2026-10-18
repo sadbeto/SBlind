@@ -8,6 +8,15 @@ updates:
       time: "10:00"
       timezone: America/Puerto_Rico
     open-pull-requests-limit: 5
+    # Expo SDK validates these as a coordinated compatibility set. Independent
+    # bumps produce broken or unsupported combinations; update them with Expo.
+    ignore:
+      - dependency-name: react
+        versions: [">19.3.0"]
+      - dependency-name: react-dom
+        versions: [">19.3.0"]
+      - dependency-name: typescript
+        versions: [">6.0.3"]
     labels:
       - dependencies
       - security
