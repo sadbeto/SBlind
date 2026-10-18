@@ -30,8 +30,15 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# credentials and local environment
+.env
+.env.*
+!.env.example
+*.credentials.json
+
+# generated exports and deployment metadata
+dist-*/
+.vercel/
 
 # typescript
 *.tsbuildinfo
